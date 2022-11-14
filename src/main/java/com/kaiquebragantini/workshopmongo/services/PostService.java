@@ -1,5 +1,6 @@
 package com.kaiquebragantini.workshopmongo.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,7 @@ import com.kaiquebragantini.workshopmongo.services.exception.ObjectNotFoundExcep
 
 @Service
 public class PostService {
-	
+
 	@Autowired
 	private PostRepository repository;
 
@@ -20,8 +21,13 @@ public class PostService {
 		Optional<Post> post = repository.findById(id);
 		return post.orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado"));
 	}
-	
-	public List<Post> findByTitle(String text){
+
+	public List<Post> findByTitle(String text) {
 		return repository.findByTitle(text);
+	}
+
+	public List<Post> fullSearch(String text, Date minDate, Date maxDate) {
+		maxDate = new Date(maxDate.getTime() + 24 * 60 * 60 * 1000);
+		return repository.fullSearch(text, minDate, maxDate);
 	}
 }
